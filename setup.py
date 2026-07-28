@@ -120,7 +120,7 @@ def get_version(*file_paths):
     raise RuntimeError('Unable to find version string.')
 
 
-VERSION = get_version("eventtracking", "__init__.py")
+VERSION = get_version("src", "eventtracking", "__init__.py")
 README = open(os.path.join(os.path.dirname(__file__), 'README.rst'),
               encoding='utf-8').read()
 REQUIREMENTS = load_requirements('requirements/base.in')
@@ -129,7 +129,8 @@ REQUIREMENTS = load_requirements('requirements/base.in')
 setup(
     name='event-tracking',
     version=VERSION,
-    packages=find_packages(),
+    packages=find_packages(where='src'),
+    package_dir={'': 'src'},
     include_package_data=True,
     license='AGPLv3 License',
     description='A simple event tracking system.',

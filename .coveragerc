@@ -1,4 +1,4 @@
 [run]
 branch = True
-include = eventtracking*
+include = src/eventtracking*
 omit = */*performance*, */*integration*, */admin.py, */apps.py

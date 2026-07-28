@@ -31,10 +31,10 @@ test.performance: test.setup ## run performance tests
 	$(PYTEST) --verbose -s -k 'performance'
 
 style: ## run pycodestyle on the code
-	pycodestyle eventtracking
+	pycodestyle src/eventtracking
 
 lint: ## run pylint on the code
-	pylint --reports=y eventtracking
+	pylint --reports=y src/eventtracking
 
 install: ## install the event-tracking package locally
 	pip install .
@@ -48,8 +48,8 @@ doc.html:
 	$(MAKE_DOC) html
 
 report: ## generate reports for quality checks and code coverage
-	pycodestyle eventtracking >pep8.report || true
-	pylint -f parseable eventtracking >pylint.report || true
+	pycodestyle src/eventtracking >pep8.report || true
+	pylint -f parseable src/eventtracking >pylint.report || true
 	coverage xml -o coverage.xml
 
 requirements: ## install development environment requirements
