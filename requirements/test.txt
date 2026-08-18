@@ -132,7 +132,7 @@ packaging==26.3
     #   -r requirements/base.txt
     #   kombu
     #   pytest
-platformdirs==4.11.2
+platformdirs==4.11.3
     # via pylint
 pluggy==1.6.0
     # via
@@ -151,7 +151,7 @@ pycparser==3.0
     # via
     #   -r requirements/base.txt
     #   cffi
-pygments==2.20.0
+pygments==2.21.0
     # via pytest
 pylint==4.0.7
     # via
@@ -199,7 +199,7 @@ six==1.17.0
     #   edx-ccx-keys
     #   edx-lint
     #   python-dateutil
-sqlparse==0.5.5
+sqlparse==0.6.0
     # via
     #   -r requirements/base.txt
     #   django
