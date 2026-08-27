@@ -29,18 +29,30 @@ jobs:
 
     - run: git reset --hard ${{ github.sha }}
 
+    - name: Install uv
+      uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
+
+    # python-semantic-release/python-semantic-release's GitHub Action builds
+    # its own Docker image fresh on every run and pins gitpython~=3.0
+    # (unbounded), so it always installs the latest 3.x release. GitPython
+    # 3.1.60 (2026-08-25) removed `Actor.name_email_regex`, which PSR's own
+    # config loader still reads unconditionally -- breaking every fresh build
+    # of the action's image, regardless of which PSR version/SHA is pinned.
+    # See python-semantic-release/python-semantic-release#1476 (open, no fix
+    # released yet). Workaround: run the same PSR version ourselves via uv,
+    # where we can pin gitpython below the break. Safe to revert to the
+    # `uses: python-semantic-release/python-semantic-release@...` action once
+    # upstream ships a fix.
     - name: Python Semantic Release
       id: release
-      uses: python-semantic-release/python-semantic-release@v10.6.1
-      with:
-        github_token: ${{ secrets.OPENEDX_SEMANTIC_RELEASE_GITHUB_TOKEN }}
-        git_committer_name: "github-actions"
-        git_committer_email: "github-actions@github.com"
-        changelog: "false"
-        # Commit, tag, push and build, but don't create the GitHub release.
-        # We create it ourselves in the next step so that the distributions
-        # are attached before the release is published. See that step for why.
-        vcs_release: "false"
+      env:
+        GH_TOKEN: ${{ secrets.OPENEDX_SEMANTIC_RELEASE_GITHUB_TOKEN }}
+        GIT_COMMIT_AUTHOR: "github-actions <github-actions@github.com>"
+      run: |
+        git config --global user.name "github-actions"
+        git config --global user.email "github-actions@github.com"
+        uvx --with "gitpython<3.1.60" --from "python-semantic-release==10.6.1" \
+          semantic-release -v version --no-changelog --no-vcs-release
 
     # This repo has immutable releases enabled, which freezes a release's
     # assets the moment it is published, so assets cannot be attached
